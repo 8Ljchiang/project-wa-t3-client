@@ -10,14 +10,15 @@ export interface BoardProps {
 }
 
 const Board = (props: BoardProps) => {
-	const { title, moves } = props;
+	const { title, moves, actions } = props;
 	return (
 		<div className="board-container">
 			<div className="board-container__header">
-				{title}
+				<p className="header__title">{title}</p>
+				<p className="header__reset" onClick={() => actions.clearAllMoves()}>Reset Game</p>
 			</div>
 			<div className="board-contrainer__body">
-				<MovesGrid moves={moves}/>
+				<MovesGrid moves={moves} actions={actions}/>
 			</div>
 		</div>
 	);

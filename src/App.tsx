@@ -3,6 +3,7 @@ import './App.css';
 
 import { IMove } from './interfaces/IMove';
 
+import Board from './components/Board';
 import { isValidPosition, isPositionOpen } from './helpers/validation';
 
 export interface AppProps { [key: string]: any };
@@ -13,7 +14,7 @@ class App extends Component<AppProps, AppState> {
     super(props);
 
     this.state = {
-      moves: []
+      moves: [{ marker: 'X', position: 1 }, { marker: 'X', position: 2}]
     }
   }
 
@@ -37,9 +38,13 @@ class App extends Component<AppProps, AppState> {
   }
 
   render() {
+    const actions = {
+      addMove: this.addMove.bind(this),
+      clearAllMoves: this.clearAllMoves.bind(this)
+    }
     return (
       <div className="page-container">
-
+        <Board moves={this.state.moves} title={"Tic Tac Toe"} actions={actions}/>
       </div>
     );
   }
