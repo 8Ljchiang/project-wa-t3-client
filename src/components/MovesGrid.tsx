@@ -11,11 +11,6 @@ export interface MovesGridProps {
 interface MovesGridState {}
 
 export default class MovesGrid extends Component<MovesGridProps, MovesGridState> {
-
-	renderCell(move: IMove) {
-		return 
-	}
-
 	renderGrid() {
 		const { moves, actions } = this.props;
 		const cells = [];
