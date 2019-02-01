@@ -10,8 +10,8 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import MovesGrid from './components/MovesGrid';
-import Board from './components/Board';
+import MovesGrid from '../components/MovesGrid';
+import Board from '../components/Board';
 
 describe("Board", () => {
 	let props;

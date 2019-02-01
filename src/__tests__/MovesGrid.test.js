@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import MovesGrid from './components/MovesGrid';
+import MovesGrid from '../components/MovesGrid';
 
 describe("MovesGrid", () => {
   let props;
