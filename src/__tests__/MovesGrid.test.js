@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import MovesGrid from '../components/MovesGrid';
 
-describe.skip("MovesGrid", () => {
+describe("MovesGrid", () => {
   let props;
   let mountedMovesGrid;
   const mountMovesGrid = () => {
@@ -18,7 +18,10 @@ describe.skip("MovesGrid", () => {
     props = {
       title: 'Tic Tac Toe',
       moves: [],
-      actions: {},
+      highlightedPositions: [],
+      actions: {
+        addMove: jest.fn()
+      },
     };
     mountedMovesGrid = undefined;
   });
@@ -48,6 +51,18 @@ describe.skip("MovesGrid", () => {
       for (let i = 0; i < gridCells.length; i++) {
         expect(gridDiv.childAt(i).hasClass('grid__cell')).toBe(true);
       }
+    });
+
+    it("all grid cells should call the addMove function when clicked", () => {
+      const wrapper = mountMovesGrid();
+      const grid = wrapper.find('div').first();
+      const gridCells = grid.children();
+      for (let i = 0; i < gridCells.length; i++) {
+        grid.childAt(i).simulate('click');
+        expect(props.actions.addMove.mock.calls[i][0]).toBe("X");
+        expect(props.actions.addMove.mock.calls[i][1]).toBe(i + 1);
+      }
+      expect(props.actions.addMove.mock.calls.length).toEqual(9);
     });
   })
 });

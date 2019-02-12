@@ -11,7 +11,7 @@ import { getRandomMoveFromServer } from './helpers/apiCalls';
 import { clearAllMoves } from './helpers/AppHelpers';
 
 export interface AppProps { };
-export interface AppState { moves: IMove[], highlightedPositions: number[] };
+export interface AppState { moves: IMove[], highlightedPositions: number[], errorMessage: string };
 
 let renderCount = 0;
 
@@ -22,10 +22,14 @@ class App extends Component<AppProps, AppState> {
     this.state = {
       moves: [],
       highlightedPositions: [],
+      errorMessage: '',
     }
   }
 
   addMove = async (marker: string, position: number) => {
+    // const currentMoves = this.state.moves;
+    // const newState = await getRandomMoveFromServer(currentMoves);
+    // this.setState(newState);
     if (isValidPosition(position) && isPositionOpen(position, this.state.moves) && this.state.highlightedPositions.length === 0) {
       const newMove: IMove = {
         marker,
@@ -34,7 +38,8 @@ class App extends Component<AppProps, AppState> {
 
       let moves = [...this.state.moves, newMove];
       let winningPattern = getMatchingPattern(moves, MARKER_1);
-
+      let error = '';
+      
       try {
         if (moves.length < 9 && winningPattern.length === 0) {
           const options = {
@@ -43,22 +48,21 @@ class App extends Component<AppProps, AppState> {
             headers: new Headers({
               'Content-Type': 'text/plain'
             })
-          }
+          };
+
           const newMoves = await getRandomMoveFromServer(SERVER_URL + RANDOM_MOVE_ROUTE, options);
-          // const newMoves = await this.getRandomMoveFromServer(moves);
-          // if (randomPosition != null) {
-          //   const randomMove = { marker: MARKER_2, position: randomPosition };
-          //   newMoves = newMoves.concat(randomMove);
-          // }
+          
           moves = newMoves ? newMoves : moves;
           winningPattern = getMatchingPattern(moves, MARKER_2);
-        }
-        this.setState({
-          moves: moves,
-          highlightedPositions: winningPattern
-        });
+        }        
       } catch (e) {
-        console.error(`${e.message}`);
+        error = e.message;
+      } finally {
+        this.setState({
+          moves,
+          highlightedPositions: winningPattern,
+          errorMessage: error
+        });
       }
     }
   }
@@ -67,31 +71,8 @@ class App extends Component<AppProps, AppState> {
     this.setState(clearAllMoves);
   }
 
-  // getRandomMoveFromServer = async (currentMoves: IMove[]): Promise<IMove[] | void> => {
-  //   // const takenPositions = moves.map((m: IMove) => m.position).join(',')
-  //   const options = {
-  //       method: 'POST',
-  //       body: JSON.stringify({moves:currentMoves}),
-  //       headers: new Headers({
-  //           'Content-Type': 'application/json',
-  //           // 'Access-Control-Allow-Origin': '*',
-  //       })
-  //   }
-    
-  //   try {
-  //     const res = await fetch(SERVER_URL + RANDOM_MOVE_ROUTE, options);
-  //     console.log(res);
-  //     const responseJson = await res.json();
-  //     return responseJson.moves;
-  //   } catch(error) {
-  //     throw error;
-  //     // console.log(`${error}`);
-  //   }
-  // }
-
   render() {
-    renderCount += 1;
-    // console.log(JSON.stringify(this.state));
+    // renderCount += 1;
     // document.getElementById("renders")!.innerText =`renders: ${renderCount}`;
     const actions = {
       addMove: this.addMove,

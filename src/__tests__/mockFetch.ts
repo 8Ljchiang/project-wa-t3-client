@@ -1,4 +1,4 @@
-import jest from 'jest-mock';
+// import jest from 'jest-mock';
 
 export const additionalMove = { marker: "O", position: 2 };
 

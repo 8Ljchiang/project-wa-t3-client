@@ -1,5 +1,5 @@
 // import jest from 'jest-mock';
-import { mockFetch, additionalMove } from '../helpers/mockFetch';
+import { mockFetch, additionalMove } from './mockFetch';
 import { getRandomMoveFromServer } from '../helpers/apiCalls';
 
 describe("api call functions", () => {
